@@ -62,10 +62,13 @@ catch {
 
 if ($MultiZone) {
     try {
-        Write-Verbose "Configuring Site Link"
-        Get-ADReplicationSiteLink -Filter * | Set-ADReplicationSiteLink -SitesIncluded @{add='ZoneB'} -ReplicationFrequencyInMinutes 15
+        Write-Verbose "Renaming default SiteLink to ZoneA-ZoneB"
+        Get-ADObject -SearchBase (Get-ADRootDSE).ConfigurationNamingContext -filter {Name -eq 'DEFAULTIPSITELINK'} | Rename-ADObject -NewName 'ZoneA-ZoneB'
+
+        Write-Verbose "Configuring SiteLink"
+        Get-ADReplicationSiteLink -Filter {SitesIncluded -eq "ZoneA"} | Set-ADReplicationSiteLink -SitesIncluded @{add='ZoneB'} -ReplicationFrequencyInMinutes 15 -Replace @{'options'=1}
     }
     catch {
-        Write-Host "Error configuring Site Link"
+        Write-Host "Error configuring SiteLink"
     }
 }

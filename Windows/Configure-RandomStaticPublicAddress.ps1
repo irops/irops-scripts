@@ -7,7 +7,7 @@ param (
 try {
     $ErrorActionPreference = "Stop"
 
-    Start-Transcript -Path c:\cfn\log\Set-EIP.ps1.txt -Append
+    Start-Transcript -Path c:\cfn\log\Configure-RandomStaticPublicAddress.ps1.txt -Append
 
     # Sanitize allowed EIPs to be used from list passed
     $allowedEIPs = $EIPs | ? { $PSItem -ne 'Null' }
